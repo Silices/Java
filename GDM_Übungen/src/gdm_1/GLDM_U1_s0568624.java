@@ -179,65 +179,89 @@ public class GLDM_U1_s0568624 implements PlugIn {
 		int r = 0;
 		int g = 0;
 		int b = 0;
-
-		for (int i=0; i<width; i++) {
-		for (int x=0; x<width; x++) {
-			if(x%3==0) {r++;}
-			
-			
-			
 		for (int y=0; y<height; y++) {
-		int pos = y*width + x; // Arrayposition bestimmen
+			for (int x=0; x<width; x++) {
+				
+				r= (int) 255*x/width;		//jeh groeßer x, desto heller wird das rot
+				g = 0;
+				b= (int) 255*y/height;     //geh groeßer y, desto heller wird das blau
+			
+			int pos = y*width + x; // Arrayposition bestimmen
 						
 			// Werte zurueckschreiben
 			pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
-		}}
-			
-			
-		for (int y=0; y<height; y++) {
-
-			if(y%3==0) {b++;}
-			for (int x1=0; x1<width; x1++) {
-			
-		int pos = y*width + x1; // Arrayposition bestimmen
-						
-			// Werte zurueckschreiben
-			pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
-		}}
 		}
 	}
+}
 	private void generateTschechicheFahne(int width, int height, int[] pixels) {
-		// Schleife ueber die y-Werte
+		int pxl=0;
+		int r =0;
+		int g=0;
+		int b=0;
+		int HalfHeight = height/2;
+		
 		for (int y=0; y<height; y++) {
-			// Schleife ueber die x-Werte
 			for (int x=0; x<width; x++) {
-				int pos = y*width + x; // Arrayposition bestimmen
-				
-				int r = 255;
-				int g = 215;
-				int b = 0;
-				
-				// Werte zurueckschreiben
-				pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
-			}
-		}
+					int pos = y*width + x; // Arrayposition bestimmen
+					
+					if (y<HalfHeight) {
+					r = 255;           //obere haelfte weiß	
+					g = 255;
+					b = 255;}
+					else {
+						r=255;			//rest rot 
+						g=0;
+						b=0;
+					}
+					if (x<=pxl)
+					{
+						r=0;
+						g=0; 			//x = Anzahl der blauen pixel
+						b=255;
+					}
+					// Werte zurueckschreiben
+					pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
+				}
+				 if(y>=HalfHeight){
+		                pxl--;}        // pxl steigt bis zur mitte des bildes, dann singt es wieder
+				 else{pxl++;}		
 	}
+}
 	private void generateBangladeschischeFahne(int width, int height, int[] pixels) {
-		// Schleife ueber die y-Werte
-		for (int y=0; y<height; y++) {
-			// Schleife ueber die x-Werte
-			for (int x=0; x<width; x++) {
-				int pos = y*width + x; // Arrayposition bestimmen
-				
-				int r = 255;
-				int g = 215;
-				int b = 0;
-				
-				// Werte zurueckschreiben
-				pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
-			}
-		}
-	}
+        int r=0;
+        int g=0;
+        int b=0;
+        int radius=150;
+        
+        int centerX=width/2;		//Mitte der x axe
+        int centerY=height/2;    //Mitte der y axe
+        
+        for(int y=0;y<height;y++){
+            for(int x=0;x<width;x++){
+                int pos = y*width + x; // Arrayposition bestimmen
+                 
+                int deltaY=Math.abs(centerY-y);		//distanz mitte zu pixel
+                int deltaX=Math.abs(centerX-x); 	// same
+                
+                double d =Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));  //distantz pixel zu mitte
+                 
+                if(d<radius){
+                    r=255;			// wenn c im radius  dann Farbe rot
+                    g=0;
+                    b=0;
+                } 
+                
+                if(d>radius){
+                    r=0;
+                    g=130;			// wenn c ausserhalb der radius dann gr�n 
+                    b=0;
+                }
+                 
+                pixels[pos] = 0xFF000000 | (r << 16) | (g << 8) |  b;
+                 
+            }
+        }
+    }
 	
 	private void dialog() {
 		// Dialog fuer Auswahl der Bilderzeugung
